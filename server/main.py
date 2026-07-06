@@ -1,14 +1,19 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from haystack.dataclasses import ChatMessage
 from pydantic import BaseModel
 
 from src.agent import build_agent, extract_tool_names
 
 load_dotenv()
+
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
 
 agent_state: dict = {}
 
@@ -68,3 +73,11 @@ def chat(req: ChatRequest):
         kb_sources=response.get("kb_sources") or [],
         web_sources=response.get("web_sources") or [],
     )
+
+
+if FRONTEND_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    def serve_frontend(full_path: str):
+        return FileResponse(FRONTEND_DIST / "index.html")

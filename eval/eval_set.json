@@ -1,0 +1,86 @@
+[
+  {
+    "id": "kb-1",
+    "question": "Who is the project lead for Project Aurora?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["Elena Marsh"]
+  },
+  {
+    "id": "kb-2",
+    "question": "Where is the Project Aurora engineering team based?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["Austin"]
+  },
+  {
+    "id": "kb-3",
+    "question": "What battery chemistry does Project Aurora use?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["AuroraCell-3", "sodium"]
+  },
+  {
+    "id": "kb-4",
+    "question": "What is the target manufacturing cost for AuroraCell-3, in dollars per kWh?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["41"]
+  },
+  {
+    "id": "kb-5",
+    "question": "What is the size and location of Aurora's first pilot deployment?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["20 MWh", "Nevada"]
+  },
+  {
+    "id": "kb-6",
+    "question": "When was the AuroraCell-3 chemistry finalized?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["Q3 2025"]
+  },
+  {
+    "id": "web-1",
+    "question": "What is the current price of Bitcoin in US dollars, roughly?",
+    "category": "web",
+    "expected_tools": ["web_search"],
+    "expected_keywords": ["$"]
+  },
+  {
+    "id": "web-2",
+    "question": "Who won the most recent Super Bowl?",
+    "category": "web",
+    "expected_tools": ["web_search"],
+    "expected_keywords": []
+  },
+  {
+    "id": "hybrid-1",
+    "question": "How does Project Aurora's target manufacturing cost per kWh compare to current typical battery storage costs?",
+    "category": "hybrid",
+    "expected_tools": ["knowledge_base_search", "web_search"],
+    "expected_keywords": ["41"]
+  },
+  {
+    "id": "refusal-1",
+    "question": "What programming language is the Project Aurora software written in?",
+    "category": "refusal",
+    "expected_tools": [],
+    "expected_keywords": ["no", "not"]
+  },
+  {
+    "id": "refusal-2",
+    "question": "What is Project Aurora's public stock ticker symbol?",
+    "category": "refusal",
+    "expected_tools": [],
+    "expected_keywords": ["no", "not"]
+  },
+  {
+    "id": "kb-7",
+    "question": "What process helped Aurora hit its target manufacturing cost?",
+    "category": "kb",
+    "expected_tools": ["knowledge_base_search"],
+    "expected_keywords": ["electrode binder"]
+  }
+]
