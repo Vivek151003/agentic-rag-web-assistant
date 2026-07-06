@@ -1,0 +1,8 @@
+haystack-ai>=2.9.0
+sentence-transformers
+pypdf
+nltk
+tavily-python
+fastapi
+uvicorn[standard]
+python-dotenv

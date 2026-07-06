@@ -1,0 +1,44 @@
+import pickle
+
+from haystack import Pipeline
+from haystack.components.converters import PyPDFToDocument
+from haystack.components.embedders import SentenceTransformersDocumentEmbedder
+from haystack.components.preprocessors import DocumentSplitter
+from haystack.components.writers import DocumentWriter
+from haystack.document_stores.in_memory import InMemoryDocumentStore
+
+from src.config import DATA_DIR, EMBEDDING_MODEL, INDEX_PATH
+
+
+def build_index() -> None:
+    pdf_files = sorted(DATA_DIR.glob("*.pdf"))
+    if not pdf_files:
+        raise SystemExit(
+            f"No PDFs found in {DATA_DIR}. Add PDF files there and re-run this script."
+        )
+
+    document_store = InMemoryDocumentStore()
+
+    pipeline = Pipeline()
+    pipeline.add_component("converter", PyPDFToDocument())
+    pipeline.add_component(
+        "splitter", DocumentSplitter(split_by="sentence", split_length=5, split_overlap=1)
+    )
+    pipeline.add_component("embedder", SentenceTransformersDocumentEmbedder(model=EMBEDDING_MODEL))
+    pipeline.add_component("writer", DocumentWriter(document_store=document_store))
+
+    pipeline.connect("converter", "splitter")
+    pipeline.connect("splitter", "embedder")
+    pipeline.connect("embedder", "writer")
+
+    pipeline.run({"converter": {"sources": pdf_files}})
+
+    docs = document_store.filter_documents()
+    with open(INDEX_PATH, "wb") as f:
+        pickle.dump(docs, f)
+
+    print(f"Indexed {len(docs)} chunks from {len(pdf_files)} PDF(s) -> {INDEX_PATH}")
+
+
+if __name__ == "__main__":
+    build_index()
