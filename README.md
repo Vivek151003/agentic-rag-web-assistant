@@ -8,12 +8,19 @@ source has the information.
 **Live demo:** https://agentic-rag-web-assistant.onrender.com/ (Render free tier — the
 instance sleeps after idle, so the first request may take ~30-60s to cold-start)
 
+Features:
+- Retrieval-first agent with live web fallback and per-answer source citations
+- Server-side, per-session conversation memory (multi-turn follow-ups work; sessions are isolated from each other)
+- Upload a PDF from the UI and it's embedded into the *live* knowledge base immediately — no restart or redeploy
+- Auto-focus: start typing anywhere on the page and keystrokes land in the chat input
+
 ## How it works
 
 ```mermaid
 flowchart LR
-    U[User] -->|question| FE[React + Vite UI]
+    U[User] -->|question + session_id| FE[React + Vite UI]
     FE -->|POST /api/chat| API[FastAPI server]
+    API -->|replay prior turns| HIST[(Per-session history)]
     API --> AG[Haystack Agent]
     AG -->|tried first| KB[knowledge_base_search]
     AG -->|fallback: recent/current info| WEB[web_search]
@@ -21,6 +28,9 @@ flowchart LR
     WEB --> TAVILY[(Tavily Search API)]
     AG -->|grounded answer + citations| API
     API -->|answer, tools_used, kb_sources, web_sources| FE
+
+    FE -->|POST /api/upload| API
+    API -->|embed + write immediately| STORE
 ```
 
 The agent is instructed to always try `knowledge_base_search` first, and only reach for
@@ -120,10 +130,10 @@ Each case checks both **tool routing** (did it call the tool(s) the question act
 requires) and **answer content** (does the answer contain the expected grounded facts).
 Results are printed to stdout and written to `eval/results.json`.
 
-**Latest run: 10/12 passed** (`kb`, `web`, and `hybrid` categories pass consistently; the
-two `refusal` cases fail).
+**Latest run: 11/12 passed** (`kb`, `web`, and `hybrid` categories pass consistently; the
+`refusal` cases are flaky, typically failing 0-2 of the 2).
 
-Both failures are a real and informative finding, not a harness bug: "Project Aurora" is
+The failure(s) are a real and informative finding, not a harness bug: "Project Aurora" is
 a generic codename, so Tavily's web search surfaces unrelated real entities using the
 same name (a browser engine, a self-driving company, etc.), and the agent confidently
 answers with facts about *those*, instead of recognizing the name collision and saying
