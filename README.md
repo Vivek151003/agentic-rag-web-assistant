@@ -5,7 +5,8 @@ falling back to live web search only when the knowledge base can't help. Built t
 demonstrate agentic tool-routing, grounded/cited answers, and honest refusal when neither
 source has the information.
 
-**Live demo:** _TODO: fill in after deploy_
+**Live demo:** https://agentic-rag-web-assistant.onrender.com/ (Render free tier — the
+instance sleeps after idle, so the first request may take ~30-60s to cold-start)
 
 ## How it works
 
