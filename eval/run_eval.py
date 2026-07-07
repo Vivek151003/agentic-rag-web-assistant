@@ -54,7 +54,7 @@ def check_keywords(expected_keywords: list[str], answer: str) -> bool:
 
 def run_eval() -> None:
     cases = json.loads(EVAL_SET_PATH.read_text())
-    agent = build_agent()
+    agent, _document_store = build_agent()
 
     results = []
     for case in cases:

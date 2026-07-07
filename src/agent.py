@@ -39,7 +39,7 @@ def load_document_store() -> InMemoryDocumentStore:
     return store
 
 
-def build_agent() -> Agent:
+def build_agent() -> tuple[Agent, InMemoryDocumentStore]:
     document_store = load_document_store()
 
     rag_tool = ComponentTool(
@@ -65,7 +65,7 @@ def build_agent() -> Agent:
         generation_kwargs={"temperature": 0},
     )
 
-    return Agent(
+    agent = Agent(
         chat_generator=chat_generator,
         tools=[rag_tool, web_tool],
         system_prompt=SYSTEM_PROMPT,
@@ -74,6 +74,7 @@ def build_agent() -> Agent:
             "web_sources": {"type": list},
         },
     )
+    return agent, document_store
 
 
 def extract_tool_names(messages) -> list[str]:
