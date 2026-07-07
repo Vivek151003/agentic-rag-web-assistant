@@ -16,8 +16,13 @@ export interface ChatResponse {
   web_sources: WebSource[];
 }
 
+export interface UploadResponse {
+  filename: string;
+  chunks_added: number;
+}
+
 export interface Message {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
   tools_used?: string[];
   kb_sources?: KBSource[];

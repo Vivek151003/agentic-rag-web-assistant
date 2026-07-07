@@ -4,6 +4,14 @@ import { SourcesPanel } from "./SourcesPanel";
 export function ChatBubble({ message }: { message: Message }) {
   const isAssistant = message.role === "assistant";
 
+  if (message.role === "system") {
+    return (
+      <div className="bubble-row system">
+        <div className="bubble system">{message.content}</div>
+      </div>
+    );
+  }
+
   return (
     <div className={`bubble-row ${message.role}`}>
       <div className={`bubble ${message.role}`}>
