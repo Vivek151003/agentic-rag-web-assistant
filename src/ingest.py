@@ -2,10 +2,10 @@ import pickle
 
 from haystack import Pipeline
 from haystack.components.converters import PyPDFToDocument
-from haystack.components.embedders import SentenceTransformersDocumentEmbedder
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
 from haystack.document_stores.in_memory import InMemoryDocumentStore
+from haystack_integrations.components.embedders.fastembed import FastembedDocumentEmbedder
 
 from src.config import DATA_DIR, EMBEDDING_MODEL, INDEX_PATH
 
@@ -24,7 +24,7 @@ def build_index() -> None:
     pipeline.add_component(
         "splitter", DocumentSplitter(split_by="sentence", split_length=5, split_overlap=1)
     )
-    pipeline.add_component("embedder", SentenceTransformersDocumentEmbedder(model=EMBEDDING_MODEL))
+    pipeline.add_component("embedder", FastembedDocumentEmbedder(model=EMBEDDING_MODEL))
     pipeline.add_component("writer", DocumentWriter(document_store=document_store))
 
     pipeline.connect("converter", "splitter")

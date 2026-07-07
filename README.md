@@ -16,7 +16,7 @@ flowchart LR
     API --> AG[Haystack Agent]
     AG -->|tried first| KB[knowledge_base_search]
     AG -->|fallback: recent/current info| WEB[web_search]
-    KB --> STORE[(In-memory vector store<br/>sentence-transformers embeddings)]
+    KB --> STORE[(In-memory vector store<br/>fastembed/ONNX embeddings)]
     WEB --> TAVILY[(Tavily Search API)]
     AG -->|grounded answer + citations| API
     API -->|answer, tools_used, kb_sources, web_sources| FE
@@ -35,7 +35,7 @@ than opaque.
 |---|---|
 | Agent framework | [Haystack](https://haystack.deepset.ai/) `Agent` with tool calling |
 | LLM | Groq-hosted `openai/gpt-oss-20b` (OpenAI-compatible endpoint) |
-| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` |
+| Embeddings | `BAAI/bge-small-en-v1.5` via [fastembed](https://github.com/qdrant/fastembed) (ONNX runtime, no torch/CUDA) |
 | Vector store | Haystack `InMemoryDocumentStore` |
 | Web search | [Tavily](https://tavily.com/) |
 | API | FastAPI |
@@ -93,6 +93,13 @@ This repo includes a `render.yaml` Blueprint. On [Render](https://render.com/):
 `New +` → `Blueprint` → connect this repo → set `GROQ_API_KEY` and `TAVILY_API_KEY` in
 the service's environment variables → deploy. Render builds the Dockerfile directly.
 
+The embedding backend is `fastembed` (ONNX runtime) rather than `sentence-transformers`
+(PyTorch) specifically because of this: the default PyPI `torch` wheel on Linux bundles
+CUDA libraries that are unused for CPU inference but pushed the process well past
+Render's free-tier 512MB limit, causing repeated OOM restarts. Measured locally under an
+actual 512MB cgroup limit, this stack runs at ~260-280MB — see commit history for the
+before/after.
+
 ## Evaluating retrieval quality
 
 `eval/eval_set.json` has 12 hand-written questions across four categories:
@@ -112,14 +119,15 @@ Each case checks both **tool routing** (did it call the tool(s) the question act
 requires) and **answer content** (does the answer contain the expected grounded facts).
 Results are printed to stdout and written to `eval/results.json`.
 
-**Latest run: 11/12 passed.**
+**Latest run: 10/12 passed** (`kb`, `web`, and `hybrid` categories pass consistently; the
+two `refusal` cases fail).
 
-The one failure (`refusal-2`, "What is Project Aurora's public stock ticker symbol?")
-is a real and informative finding, not a harness bug: "Project Aurora" is a generic
-codename, so Tavily's web search surfaces an unrelated real company using the same name,
-and the agent confidently answers with that company's ticker instead of recognizing the
-name collision and saying the knowledge base/web have no information about *this*
-Project Aurora. This is a known limitation of naive knowledge-base + web-search fallback
-for internal-only codenames that happen to collide with public entities — a system
-prompt change to explicitly check for name-scope mismatches would be the fix, not
-attempted here to keep this eval an honest measurement rather than a tuned-to-pass one.
+Both failures are a real and informative finding, not a harness bug: "Project Aurora" is
+a generic codename, so Tavily's web search surfaces unrelated real entities using the
+same name (a browser engine, a self-driving company, etc.), and the agent confidently
+answers with facts about *those*, instead of recognizing the name collision and saying
+the knowledge base/web have no information about *this* Project Aurora. This is a known
+limitation of naive knowledge-base + web-search fallback for internal-only codenames
+that happen to collide with public entities — a system prompt change to explicitly check
+for name-scope mismatches would be the fix, not attempted here to keep this eval an
+honest measurement rather than a tuned-to-pass one.

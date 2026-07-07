@@ -1,7 +1,7 @@
 from haystack import component
-from haystack.components.embedders import SentenceTransformersTextEmbedder
 from haystack.components.retrievers.in_memory import InMemoryEmbeddingRetriever
 from haystack.document_stores.types import DocumentStore
+from haystack_integrations.components.embedders.fastembed import FastembedTextEmbedder
 from tavily import TavilyClient
 
 from src.config import EMBEDDING_MODEL, RAG_TOP_K, WEB_MAX_RESULTS
@@ -13,7 +13,7 @@ class KnowledgeBaseSearch:
 
     def __init__(self, document_store: DocumentStore, top_k: int = RAG_TOP_K):
         self.document_store = document_store
-        self.text_embedder = SentenceTransformersTextEmbedder(model=EMBEDDING_MODEL)
+        self.text_embedder = FastembedTextEmbedder(model=EMBEDDING_MODEL)
         self.text_embedder.warm_up()
         self.retriever = InMemoryEmbeddingRetriever(document_store=document_store, top_k=top_k)
 

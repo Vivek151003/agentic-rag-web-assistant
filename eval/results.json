@@ -1,6 +1,6 @@
 {
-  "run_at": "2026-07-06T18:07:22.470547+00:00",
-  "passed": 11,
+  "run_at": "2026-07-07T04:20:06.135740+00:00",
+  "passed": 10,
   "total": 12,
   "results": [
     {
@@ -117,10 +117,10 @@
       "id": "web-1",
       "category": "web",
       "question": "What is the current price of Bitcoin in US dollars, roughly?",
-      "answer": "The most recent data shows Bitcoin trading at roughly **$63,600\u202fUSD per BTC** (prices vary slightly across exchanges, ranging from about $62,100 to $63,700). This figure comes from live market feeds (e.g., TradingView, CoinMarketCap, Coinbase, Binance).",
+      "answer": "The most recent market data shows Bitcoin trading around **$63,800\u202fUSD** per coin (prices fluctuate by a few hundred dollars in a 24\u2011hour period). This figure comes from live market feeds such as Coinbase, TradingView, and CoinMarketCap.",
       "tools_used": [
-        "knowledge_base_search",
-        "web_search"
+        "web_search",
+        "knowledge_base_search"
       ],
       "expected_tools": [
         "web_search"
@@ -136,9 +136,8 @@
       "id": "web-2",
       "category": "web",
       "question": "Who won the most recent Super Bowl?",
-      "answer": "The most recent Super\u202fBowl (Super\u202fBowl\u202fLX) was won by the **Seattle Seahawks**, who defeated the New\u202fEngland Patriots 29\u201113 on February\u202f8,\u202f2026\u3010web_search\u3011.",
+      "answer": "The most recent Super\u202fBowl (Super\u202fBowl\u202fLIX, played on February\u202f9\u202f2025) was won by the **Philadelphia Eagles**, who defeated the Kansas City Chiefs 40\u201122.  \n*Source: live\u2011web search (Wikipedia, Fox Sports, etc.)*",
       "tools_used": [
-        "knowledge_base_search",
         "web_search"
       ],
       "expected_tools": [
@@ -153,7 +152,7 @@
       "id": "hybrid-1",
       "category": "hybrid",
       "question": "How does Project Aurora's target manufacturing cost per kWh compare to current typical battery storage costs?",
-      "answer": "**Project Aurora target vs. current battery\u2011storage costs**\n\n| Item | Cost | Source |\n|------|------|--------|\n| AuroraCell\u20113 target manufacturing cost | **$41\u202fper\u202fkWh** | Project Aurora internal knowledge base |\n| Typical utility\u2011scale battery storage (installed) | **$125\u2013$334\u202fper\u202fkWh** (2025\u20112026) | Web search \u2013 Ambit Energy & BloombergNEF |\n| Typical lithium\u2011ion pack price (stationary) | **$70\u2013$108\u202fper\u202fkWh** (2025) | Web search \u2013 BloombergNEF |\n| Residential battery systems | **$700\u2013$1,300\u202fper\u202fkWh** | Web search \u2013 EnergySage |\n\n**Comparison**\n\n- Aurora\u2019s $41\u202fkWh manufacturing cost is **well below** the current installed cost range for utility\u2011scale projects ($125\u2013$334\u202fkWh) and also below the $70\u2013$108\u202fkWh price of stationary lithium\u2011ion packs.  \n- Even when considering only the raw battery pack cost, Aurora\u2019s target is roughly **3\u20134 times cheaper** than typical market prices.  \n- For residential systems, Aurora\u2019s cost is an order of magnitude lower than the $700\u2013$1,300\u202fkWh range.\n\nThus, Project Aurora\u2019s manufacturing target represents a significant cost advantage over today\u2019s typical battery\u2011storage costs.",
+      "answer": "**Project Aurora\u2019s target vs. today\u2019s market**\n\n| Metric | Project Aurora (target) | Typical current battery\u2011storage cost |\n|--------|------------------------|-------------------------------------|\n| **Manufacturing cost per kWh** | **$41\u202f/\u202fkWh** (AuroraCell\u20113 sodium\u2011ion chemistry) | **$70\u2013$400\u202f/\u202fkWh** (utility\u2011scale lithium\u2011ion or LFP packs) |\n\n**Sources**\n\n* **Knowledge base** \u2013 Project Aurora internal doc: \u201cThe target manufacturing cost for AuroraCell\u20113 is 41 dollars per kWh.\u201d  \n* **Web** \u2013 2024 industry data: \u201cTypical battery storage cost per kWh in 2024 is around $400, driven by oversupply and LFP adoption.\u201d (BloombergNEF, 2024) and \u201cUtility\u2011scale projects range from $125 to $334\u202f/\u202fkWh\u201d (Ambit Energy, 2025).\n\n**Comparison**\n\nAurora\u2019s target cost of **$41\u202f/\u202fkWh** is roughly **10\u201330 times lower** than the prevailing market cost for utility\u2011scale battery storage, which currently sits between **$70 and $400\u202f/\u202fkWh** depending on chemistry and project size. This represents a significant cost advantage if the target can be achieved at scale.",
       "tools_used": [
         "knowledge_base_search",
         "web_search"
@@ -173,7 +172,7 @@
       "id": "refusal-1",
       "category": "refusal",
       "question": "What programming language is the Project Aurora software written in?",
-      "answer": "The Project\u202fAurora software is implemented in **Rust, C++, and Swift**\u3010web_search\u3011. The knowledge base does not contain information on the programming language used.",
+      "answer": "The core Project\u202fAurora software is primarily written in **Python**.  \nIts development environment (the Aurora IDE) is built in **Swift** for macOS, and the Aurora SDK that supports hardware firmware is a **C++** development environment.  \n\nSources: web search results showing Python\u2011based Aurora, a Swift IDE, and a C++ SDK.",
       "tools_used": [
         "knowledge_base_search",
         "web_search"
@@ -184,14 +183,14 @@
         "not"
       ],
       "tools_ok": true,
-      "keywords_ok": true,
-      "passed": true
+      "keywords_ok": false,
+      "passed": false
     },
     {
       "id": "refusal-2",
       "category": "refusal",
       "question": "What is Project Aurora's public stock ticker symbol?",
-      "answer": "Project\u202fAurora\u2019s public stock ticker symbol is **AUR** (traded on Nasdaq).  \n*Source: web search.*",
+      "answer": "The public stock ticker symbol for Project\u202fAurora is **AUR**\u3010web_search\u3011.",
       "tools_used": [
         "knowledge_base_search",
         "web_search"
@@ -209,7 +208,7 @@
       "id": "kb-7",
       "category": "kb",
       "question": "What process helped Aurora hit its target manufacturing cost?",
-      "answer": "The target manufacturing cost for AuroraCell\u20113 was reached thanks to a **new electrode binder process** that lowered production expenses. (Source: internal knowledge base)",
+      "answer": "Aurora reached its target manufacturing cost by adopting a **new electrode binder process** for its AuroraCell\u20113 sodium\u2011ion batteries\u3010knowledge_base_search\u3011.",
       "tools_used": [
         "knowledge_base_search"
       ],
